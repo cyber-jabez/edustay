@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -12,8 +11,6 @@ import {
   Building,
   Bell,
   LogOut,
-  ChevronRight,
-  ShieldAlert,
 } from "lucide-react";
 
 export function StaffSidebar() {
@@ -21,12 +18,12 @@ export function StaffSidebar() {
   const router = useRouter();
 
   const navItems = [
-    { label: "Staff Dashboard", href: "/staff/dashboard", icon: LayoutDashboard },
-    { label: "Hostel Roll-Call", href: "/staff/attendance", icon: ClipboardCheck, badge: "SRA" },
-    { label: "Outpass Decisions", href: "/staff/outpass", icon: FileCheck2, badge: "Dual Review" },
+    { label: "Dashboard", href: "/staff/dashboard", icon: LayoutDashboard },
+    { label: "Hostel Roll-Call", href: "/staff/attendance", icon: ClipboardCheck },
+    { label: "Outpass Queue", href: "/staff/outpass", icon: FileCheck2 },
     { label: "Maintenance Tickets", href: "/staff/complaints", icon: Wrench },
     { label: "Mess Menu Editor", href: "/staff/mess", icon: UtensilsCrossed },
-    { label: "Room Allocations", href: "/staff/allocations", icon: Building, badge: "Admin" },
+    { label: "Room Allocations", href: "/staff/allocations", icon: Building },
     { label: "Publish Notices", href: "/staff/notices", icon: Bell },
   ];
 
@@ -41,31 +38,30 @@ export function StaffSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-100 flex flex-col justify-between shrink-0 h-screen sticky top-0 z-30 select-none">
+    <aside className="w-60 bg-white border-r border-zinc-200 flex flex-col justify-between shrink-0 h-screen sticky top-0 z-30 select-none font-sans">
       <div>
-        {/* Karunya EduStay Staff Header */}
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        {/* Brand header */}
+        <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black text-sm shadow-sm">
+            <div className="w-7 h-7 rounded-md bg-zinc-900 text-white flex items-center justify-center font-bold text-xs">
               ES
             </div>
             <div>
-              <div className="font-extrabold text-base tracking-tight text-white leading-tight">
-                <span>Edu</span>
-                <span className="text-amber-400">Stay</span>
+              <div className="font-bold text-sm text-zinc-900 leading-tight">
+                EduStay
               </div>
-              <div className="text-[9px] uppercase tracking-wider font-bold text-slate-400">
-                Staff Administration
+              <div className="text-[10px] text-zinc-400 font-medium">
+                Staff Supervisory
               </div>
             </div>
           </div>
-          <span className="text-[10px] font-bold text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800">
-            Staff Portal
+          <span className="text-[10px] font-medium text-zinc-700 bg-zinc-100 px-1.5 py-0.5 rounded">
+            Staff
           </span>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]">
+        {/* Navigation list */}
+        <nav className="p-2.5 space-y-0.5 overflow-y-auto max-h-[calc(100vh-125px)] text-xs">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -74,38 +70,17 @@ export function StaffSidebar() {
               <a
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-all group ${
+                className={`flex items-center justify-between px-3 py-2 rounded-lg transition-all ${
                   isActive
-                    ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    ? "bg-zinc-100 text-zinc-900 font-semibold"
+                    : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? "text-slate-950" : "text-slate-400 group-hover:text-slate-200"
-                    }`}
-                  />
+                <div className="flex items-center gap-2.5">
+                  <Icon className={`w-4 h-4 ${isActive ? "text-zinc-900" : "text-zinc-400"}`} />
                   <span>{item.label}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  {item.badge && (
-                    <span
-                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                        isActive
-                          ? "bg-slate-950 text-amber-400"
-                          : "bg-slate-800 text-amber-300 border border-slate-700"
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                  <ChevronRight
-                    className={`w-3.5 h-3.5 ${
-                      isActive ? "text-slate-950" : "text-slate-600 group-hover:text-slate-400"
-                    }`}
-                  />
-                </div>
+                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-zinc-900"></span>}
               </a>
             );
           })}
@@ -113,17 +88,16 @@ export function StaffSidebar() {
       </div>
 
       {/* Logout */}
-      <div className="p-3 border-t border-slate-800 bg-slate-950/40">
+      <div className="p-2.5 border-t border-zinc-100 bg-zinc-50/50">
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-rose-300 bg-rose-950/40 hover:bg-rose-900/50 border border-rose-900 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition"
         >
-          <LogOut className="w-3.5 h-3.5" />
-          <span>Exit Staff Session</span>
+          <LogOut className="w-3.5 h-3.5 text-zinc-400" />
+          <span>Sign Out</span>
         </button>
       </div>
     </aside>
   );
 }
-

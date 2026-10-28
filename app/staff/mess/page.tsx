@@ -2,13 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  UtensilsCrossed,
   Plus,
-  Save,
   CheckCircle2,
   AlertCircle,
-  Leaf,
-  Drumstick,
 } from "lucide-react";
 
 export default function StaffMessPage() {
@@ -83,8 +79,8 @@ export default function StaffMessPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-xs font-semibold text-slate-500">Loading mess menu configuration...</div>
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="text-xs text-zinc-500">Loading mess menu...</div>
       </div>
     );
   }
@@ -93,21 +89,27 @@ export default function StaffMessPage() {
   const currentMenu = menus.find((m: any) => m.dayOfWeek === selectedDay);
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div className="border-b border-slate-200 pb-4">
-        <h1 className="text-xl font-bold text-slate-900">Hostel Mess Menu Management</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Configure, publish and modify weekly dining schedules for campus student residences
+    <div className="space-y-6 max-w-4xl">
+      <div className="border-b border-zinc-200 pb-4">
+        <h1 className="text-lg font-semibold text-zinc-900 tracking-tight">Mess Menu Management</h1>
+        <p className="text-xs text-zinc-500 mt-0.5">
+          Configure and publish daily menus for campus student residences
         </p>
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-xs font-semibold flex items-center gap-2 ${
-          message.startsWith("Error")
-            ? "bg-rose-50 border border-rose-200 text-rose-700"
-            : "bg-emerald-50 border border-emerald-200 text-emerald-700"
-        }`}>
-          {message.startsWith("Error") ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+        <div
+          className={`p-3 rounded text-xs flex items-center gap-2 border ${
+            message.startsWith("Error")
+              ? "bg-red-50 border-red-200 text-red-800"
+              : "bg-zinc-50 border-zinc-200 text-zinc-800"
+          }`}
+        >
+          {message.startsWith("Error") ? (
+            <AlertCircle className="w-4 h-4 text-red-600" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4 text-zinc-700" />
+          )}
           <span>{message}</span>
         </div>
       )}
@@ -118,58 +120,58 @@ export default function StaffMessPage() {
           <button
             key={day}
             onClick={() => setSelectedDay(day)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded text-xs font-medium transition whitespace-nowrap ${
               selectedDay === day
-                ? "bg-slate-900 text-amber-400 shadow-sm"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                ? "bg-zinc-900 text-white"
+                : "bg-white text-zinc-600 border border-zinc-200 hover:bg-zinc-50"
             }`}
           >
-            {day}
+            {day.charAt(0) + day.slice(1).toLowerCase()}
           </button>
         ))}
       </div>
 
       {/* Add New Dish Form */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4 text-xs">
-        <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2.5">
-          <Plus className="w-4 h-4 text-emerald-600" />
-          <span>Add Dish to {selectedDay} Schedule</span>
+      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4 text-xs">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 flex items-center gap-2 border-b border-zinc-100 pb-2.5">
+          <Plus className="w-4 h-4 text-zinc-600" />
+          <span>Add Dish ({selectedDay.charAt(0) + selectedDay.slice(1).toLowerCase()})</span>
         </h2>
 
-        <form onSubmit={handleAddItem} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <form onSubmit={handleAddItem} className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Meal Period</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Meal Period</label>
               <select
                 value={mealType}
                 onChange={(e) => setMealType(e.target.value as any)}
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-1.5 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
               >
                 <option value="BREAKFAST">Breakfast</option>
                 <option value="LUNCH">Lunch</option>
-                <option value="SNACKS">Evening Snacks</option>
+                <option value="SNACKS">Snacks</option>
                 <option value="DINNER">Dinner</option>
               </select>
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Dish Name</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Dish Name</label>
               <input
                 type="text"
                 required
                 value={itemName}
                 onChange={(e) => setItemName(e.target.value)}
-                placeholder="e.g. Masala Dosa & Sambar"
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                placeholder="e.g. Masala Dosa"
+                className="w-full p-1.5 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
               />
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Classification</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Type</label>
               <select
                 value={isVeg ? "VEG" : "NON_VEG"}
                 onChange={(e) => setIsVeg(e.target.value === "VEG")}
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-1.5 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
               >
                 <option value="VEG">Vegetarian</option>
                 <option value="NON_VEG">Non-Vegetarian</option>
@@ -177,24 +179,24 @@ export default function StaffMessPage() {
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Allergen Notice</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Allergens</label>
               <input
                 type="text"
                 value={allergens}
                 onChange={(e) => setAllergens(e.target.value)}
-                placeholder="e.g. Dairy, Gluten, Nuts"
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                placeholder="e.g. Dairy, Gluten"
+                className="w-full p-1.5 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
               />
             </div>
 
             <div className="sm:col-span-3">
-              <label className="text-slate-700 font-semibold block mb-1">Description</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Description</label>
               <input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Accompaniments, preparation notes"
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                placeholder="Accompaniments, notes"
+                className="w-full p-1.5 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
               />
             </div>
 
@@ -202,9 +204,9 @@ export default function StaffMessPage() {
               <button
                 type="submit"
                 disabled={adding}
-                className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-bold rounded-lg shadow-sm transition"
+                className="w-full py-1.5 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-medium rounded text-xs transition"
               >
-                {adding ? "Adding..." : "Add Dish to Menu"}
+                {adding ? "Adding..." : "Add Dish"}
               </button>
             </div>
           </div>
@@ -212,31 +214,30 @@ export default function StaffMessPage() {
       </section>
 
       {/* Current Dishes for Selected Day */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-900 flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <span>Active Dishes Scheduled for {selectedDay}</span>
-          <span className="text-xs text-slate-500 font-semibold">{currentMenu?.items?.length || 0} Total Courses</span>
-        </h2>
+      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900">
+            Scheduled Dishes
+          </h2>
+          <span className="text-[11px] text-zinc-500">{currentMenu?.items?.length || 0} items</span>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           {currentMenu?.items?.map((it: any) => (
-            <div key={it.id} className="p-3 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-between">
+            <div key={it.id} className="p-3 rounded border border-zinc-200 bg-zinc-50 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-800">{it.itemName}</span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">
+                  <span className="font-medium text-zinc-900">{it.itemName}</span>
+                  <span className="text-[10px] text-zinc-600 bg-zinc-200 px-1.5 py-0.5 rounded">
                     {it.mealType}
                   </span>
                 </div>
-                {it.description && <p className="text-[11px] text-slate-500 mt-0.5">{it.description}</p>}
-                {it.allergens && <div className="text-[10px] text-amber-700 mt-0.5">Allergens: {it.allergens}</div>}
+                {it.description && <p className="text-[11px] text-zinc-500 mt-0.5">{it.description}</p>}
+                {it.allergens && <div className="text-[10px] text-zinc-500 mt-0.5">Allergens: {it.allergens}</div>}
               </div>
 
-              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 ${
-                it.isVeg ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
-              }`}>
-                {it.isVeg ? <Leaf className="w-3 h-3" /> : <Drumstick className="w-3 h-3" />}
-                <span>{it.isVeg ? "Veg" : "Non-Veg"}</span>
+              <span className="px-1.5 py-0.5 rounded text-[10px] bg-zinc-200 text-zinc-700">
+                {it.isVeg ? "Veg" : "Non-Veg"}
               </span>
             </div>
           ))}
@@ -245,4 +246,3 @@ export default function StaffMessPage() {
     </div>
   );
 }
-

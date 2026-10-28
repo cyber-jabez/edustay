@@ -5,12 +5,10 @@ import { useRouter } from "next/navigation";
 import {
   GraduationCap,
   Users,
-  Building2,
   Shield,
   KeyRound,
   UserCheck,
   AlertCircle,
-  HelpCircle,
   ArrowRight,
   Info,
 } from "lucide-react";
@@ -24,13 +22,13 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const demoAccounts = [
-    { label: "Jabez Gabrielraj (Student - URK25CS6015)", id: "URK25CS6015", pass: "karunya123", role: "STUDENT" as const },
-    { label: "Samuel Johnson (Student Roommate - URK25CS6016)", id: "URK25CS6016", pass: "karunya123", role: "STUDENT" as const },
-    { label: "Mr. D. Joseph (SRA - SRA001)", id: "SRA001", pass: "karunya123", role: "STAFF" as const },
-    { label: "Dr. R. Philip (Faculty Mentor - MENTOR01)", id: "MENTOR01", pass: "karunya123", role: "STAFF" as const },
-    { label: "Dr. K. Samuel (Hostel Warden - WARDEN01)", id: "WARDEN01", pass: "karunya123", role: "STAFF" as const },
-    { label: "Dr. C. Andrews (Hostel Administrator - HADMIN01)", id: "HADMIN01", pass: "karunya123", role: "STAFF" as const },
-    { label: "CIT Admin (System Admin - SYSADMIN)", id: "SYSADMIN", pass: "karunya123", role: "STAFF" as const },
+    { label: "Jabez Gabrielraj (Student)", id: "URK25CS6015", pass: "karunya123", role: "STUDENT" as const },
+    { label: "Samuel Johnson (Roommate)", id: "URK25CS6016", pass: "karunya123", role: "STUDENT" as const },
+    { label: "Mr. D. Joseph (SRA)", id: "SRA001", pass: "karunya123", role: "STAFF" as const },
+    { label: "Dr. R. Philip (Mentor)", id: "MENTOR01", pass: "karunya123", role: "STAFF" as const },
+    { label: "Dr. K. Samuel (Warden)", id: "WARDEN01", pass: "karunya123", role: "STAFF" as const },
+    { label: "Dr. C. Andrews (Hostel Admin)", id: "HADMIN01", pass: "karunya123", role: "STAFF" as const },
+    { label: "CIT Admin (System Admin)", id: "SYSADMIN", pass: "karunya123", role: "STAFF" as const },
   ];
 
   const handleQuickFill = (acc: typeof demoAccounts[0]) => {
@@ -43,7 +41,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedRole) {
-      setError("Please select whether you are logging in as a Student or Staff member.");
+      setError("Please choose either Student or Staff login.");
       return;
     }
 
@@ -72,7 +70,7 @@ export default function LoginPage() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("An unexpected error occurred. Please verify your credentials.");
+        setError("Invalid credentials. Please verify your details.");
       }
     } finally {
       setLoading(false);
@@ -80,138 +78,128 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between selection:bg-sky-100 selection:text-sky-900">
-      {/* Top Header matching Reference Portal */}
-      <header className="w-full border-b border-slate-100 px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-tr from-[#0072bc] to-sky-500 text-white font-bold text-xl shadow-sm">
-            ES
-          </div>
-          <div>
-            <div className="font-extrabold text-xl tracking-tight text-slate-900 flex items-center gap-1.5">
-              <span>Edu</span>
-              <span className="text-[#0072bc]">Stay</span>
+    <div className="min-h-screen bg-zinc-50 flex flex-col justify-between selection:bg-zinc-200 selection:text-zinc-900 font-sans">
+      {/* Top Header - Neutral and Minimal */}
+      <header className="w-full border-b border-zinc-200/80 bg-white px-6 py-3.5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-zinc-900 text-white font-bold text-sm tracking-tight">
+              ES
             </div>
-            <div className="text-[10px] uppercase tracking-wider font-semibold text-slate-500">
-              Hostel & Residence Portal
+            <div>
+              <div className="font-bold text-base tracking-tight text-zinc-900">
+                EduStay
+              </div>
+              <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-medium">
+                Karunya University Residences
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Karunya University Branding */}
-        <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
-            <div className="text-xs font-bold text-[#0a2240] uppercase tracking-wide">
-              Karunya Institute of Technology and Sciences
+            <div className="text-xs font-semibold text-zinc-800">
+              Karunya Institute of Technology & Sciences
             </div>
-            <div className="text-[10px] text-slate-500">
-              Deemed to be University • Coimbatore
-            </div>
-          </div>
-          <div className="w-9 h-9 rounded-full bg-[#0a2240] text-amber-400 font-serif font-black flex items-center justify-center border-2 border-amber-400 shadow-sm text-sm">
-            K
+            <div className="text-[11px] text-zinc-500">Coimbatore</div>
           </div>
         </div>
       </header>
 
-      {/* Main Login Workspace */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 max-w-5xl mx-auto w-full">
-        <div className="w-full max-w-2xl text-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
-            Select the role to <span className="text-[#0072bc]">Login</span>
+      {/* Main Workspace */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-10 max-w-2xl mx-auto w-full">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
+            Sign in to EduStay
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Access your residential room allocation, outpass authorizations, mess schedule, and attendance
+          <p className="text-xs text-zinc-500 mt-1">
+            Centralized student residence portal & hostel administration
           </p>
         </div>
 
-        {/* Role Selector Cards matching screenshot */}
-        <div className="w-full max-w-xl space-y-4 mb-6">
-          {/* Student Role Card */}
+        {/* Role Choice Cards */}
+        <div className="w-full space-y-3 mb-6">
           <button
             type="button"
             onClick={() => {
               setSelectedRole("STUDENT");
               setError(null);
             }}
-            className={`w-full p-4 rounded-xl border transition-all text-left flex items-center justify-between ${
+            className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
               selectedRole === "STUDENT"
-                ? "border-[#0072bc] bg-sky-50/70 shadow-md ring-2 ring-sky-200"
-                : "border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300"
+                ? "border-zinc-900 bg-white ring-1 ring-zinc-900 shadow-sm"
+                : "border-zinc-200 bg-white hover:border-zinc-300"
             }`}
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-sky-100 text-[#0072bc] flex items-center justify-center border border-sky-200 shadow-sm">
-                <GraduationCap className="w-6 h-6" />
+            <div className="flex items-center gap-3.5">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
+                selectedRole === "STUDENT" ? "bg-zinc-900 text-white border-zinc-900" : "bg-zinc-50 text-zinc-600 border-zinc-200"
+              }`}>
+                <GraduationCap className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-base font-bold text-slate-800">KITS Students</div>
-                <div className="text-xs text-slate-500">Student Residence, Room Allocations, Outpass & Complaints</div>
+                <div className="text-sm font-semibold text-zinc-900">KITS Students</div>
+                <div className="text-xs text-zinc-500">Hostel room allocation, outpasses, mess & attendance</div>
               </div>
             </div>
-            <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-              selectedRole === "STUDENT" ? "border-[#0072bc] bg-[#0072bc] text-white" : "border-slate-300"
+            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+              selectedRole === "STUDENT" ? "border-zinc-900 bg-zinc-900" : "border-zinc-300"
             }`}>
-              {selectedRole === "STUDENT" && <span className="w-2 h-2 rounded-full bg-white"></span>}
+              {selectedRole === "STUDENT" && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
             </div>
           </button>
 
-          {/* Staff & Others Role Card */}
           <button
             type="button"
             onClick={() => {
               setSelectedRole("STAFF");
               setError(null);
             }}
-            className={`w-full p-4 rounded-xl border transition-all text-left flex items-center justify-between ${
+            className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
               selectedRole === "STAFF"
-                ? "border-[#0072bc] bg-sky-50/70 shadow-md ring-2 ring-sky-200"
-                : "border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300"
+                ? "border-zinc-900 bg-white ring-1 ring-zinc-900 shadow-sm"
+                : "border-zinc-200 bg-white hover:border-zinc-300"
             }`}
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center border border-amber-200 shadow-sm">
-                <Users className="w-6 h-6" />
+            <div className="flex items-center gap-3.5">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
+                selectedRole === "STAFF" ? "bg-zinc-900 text-white border-zinc-900" : "bg-zinc-50 text-zinc-600 border-zinc-200"
+              }`}>
+                <Users className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-base font-bold text-slate-800">Staffs & Others</div>
-                <div className="text-xs text-slate-500">Mentors, SRAs, Wardens, Mess Managers & Administrators</div>
+                <div className="text-sm font-semibold text-zinc-900">Staffs & Others</div>
+                <div className="text-xs text-zinc-500">Mentors, SRAs, Wardens & Residence Administrators</div>
               </div>
             </div>
-            <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-              selectedRole === "STAFF" ? "border-[#0072bc] bg-[#0072bc] text-white" : "border-slate-300"
+            <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+              selectedRole === "STAFF" ? "border-zinc-900 bg-zinc-900" : "border-zinc-300"
             }`}>
-              {selectedRole === "STAFF" && <span className="w-2 h-2 rounded-full bg-white"></span>}
+              {selectedRole === "STAFF" && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
             </div>
           </button>
         </div>
 
-        {/* Credentials Form */}
+        {/* Form Container */}
         {selectedRole && (
-          <div className="w-full max-w-xl bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-8 animate-in fade-in-50 duration-200">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-[#0072bc]" />
-                <span className="text-sm font-semibold text-slate-800">
-                  {selectedRole === "STUDENT" ? "Student Institutional Sign In" : "Staff Authorization Portal"}
-                </span>
-              </div>
-              <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-sky-100 text-sky-800">
-                Encrypted Session
+          <div className="w-full bg-white border border-zinc-200 rounded-xl p-5 shadow-sm mb-6">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-4">
+              <span className="text-xs font-semibold text-zinc-800">
+                {selectedRole === "STUDENT" ? "Student Sign In" : "Staff Authorization"}
               </span>
+              <span className="text-[11px] text-zinc-400">Secure Session</span>
             </div>
 
             {error && (
-              <div className="mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+              <div className="mb-4 p-2.5 rounded-lg bg-zinc-50 border border-zinc-300 text-zinc-800 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-zinc-600" />
                 <span>{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  {selectedRole === "STUDENT" ? "Register Number / Student ID" : "Staff Code or University Email"}
+                <label className="block text-zinc-700 font-medium mb-1">
+                  {selectedRole === "STUDENT" ? "Register Number / ID" : "Staff Code / Email"}
                 </label>
                 <div className="relative">
                   <input
@@ -219,15 +207,15 @@ export default function LoginPage() {
                     required
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
-                    placeholder={selectedRole === "STUDENT" ? "e.g. URK25CS6015" : "e.g. SRA001 or WARDEN01"}
-                    className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0072bc] focus:border-transparent transition-all uppercase"
+                    placeholder={selectedRole === "STUDENT" ? "e.g. URK25CS6015" : "e.g. SRA001"}
+                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition uppercase"
                   />
-                  <UserCheck className="w-4 h-4 text-slate-400 absolute right-3.5 top-3" />
+                  <UserCheck className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-2.5" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-zinc-700 font-medium mb-1">
                   Password
                 </label>
                 <div className="relative">
@@ -237,35 +225,28 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter password"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#0072bc] focus:border-transparent transition-all"
+                    className="w-full px-3 py-2 text-xs rounded-lg border border-zinc-200 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition"
                   />
-                  <KeyRound className="w-4 h-4 text-slate-400 absolute right-3.5 top-3" />
+                  <KeyRound className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-2.5" />
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 bg-[#0072bc] hover:bg-[#005ea2] disabled:bg-slate-400 text-white font-semibold text-sm rounded-lg shadow-sm transition-all flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-4 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-medium text-xs rounded-lg transition flex items-center justify-center gap-2"
               >
-                {loading ? (
-                  <span>Authenticating...</span>
-                ) : (
-                  <>
-                    <span>Proceed to Residence Dashboard</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
+                {loading ? "Authenticating..." : "Continue to Dashboard"}
+                {!loading && <ArrowRight className="w-3.5 h-3.5" />}
               </button>
             </form>
 
-            {/* Quick Demo Selector for Reviewers */}
-            <div className="mt-5 pt-4 border-t border-slate-100">
-              <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                <Info className="w-3.5 h-3.5 text-sky-600" />
-                <span>Demonstration Accounts (Instant One-Click Login)</span>
+            {/* Quick Demo Fill */}
+            <div className="mt-4 pt-4 border-t border-zinc-100">
+              <div className="text-[11px] font-medium text-zinc-400 mb-2">
+                1-Click Demo Profiles:
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-2 gap-2 text-xs">
                 {demoAccounts
                   .filter((a) => a.role === selectedRole)
                   .map((acc) => (
@@ -273,10 +254,10 @@ export default function LoginPage() {
                       key={acc.id}
                       type="button"
                       onClick={() => handleQuickFill(acc)}
-                      className="text-left px-2.5 py-1.5 rounded border border-slate-200 bg-slate-50 hover:bg-sky-50 hover:border-sky-300 text-slate-700 transition truncate"
+                      className="text-left p-2 rounded-lg border border-zinc-200 hover:border-zinc-400 bg-zinc-50/60 transition truncate"
                     >
-                      <div className="font-semibold text-slate-800">{acc.label}</div>
-                      <div className="text-[10px] text-slate-500">ID: {acc.id} • Pass: {acc.pass}</div>
+                      <div className="font-medium text-zinc-800 text-[11px] truncate">{acc.label}</div>
+                      <div className="text-[10px] text-zinc-400">{acc.id}</div>
                     </button>
                   ))}
               </div>
@@ -284,54 +265,23 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Bottom Information and Reference Notices matching Image 1 */}
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div className="p-4 rounded-xl border border-sky-100 bg-gradient-to-r from-sky-50/80 to-blue-50/60 flex items-start gap-3 shadow-sm">
-            <Building2 className="w-5 h-5 text-[#0072bc] shrink-0 mt-0.5" />
-            <div>
-              <div className="text-xs font-bold text-[#0a2240]">Announcement for Students</div>
-              <div className="text-xs text-slate-600 mt-1">
-                EduStay residence registration and outpass management is live. Submit room preferences for Even Semester 2025-2026.
-              </div>
-              <div className="text-xs font-semibold text-[#0072bc] mt-1.5 underline">
-                https://studentportal.edustay.karunya.edu
-              </div>
-            </div>
+        {/* Flat info notes */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-500">
+          <div className="p-3 bg-white border border-zinc-200 rounded-lg">
+            <span className="font-medium text-zinc-700 block mb-0.5">Note for Parents</span>
+            <span>Queries & Emergency verification: myksupport@karunya.edu.in</span>
           </div>
-
-          <div className="p-4 rounded-xl border border-slate-200 bg-white shadow-sm space-y-2">
-            <div>
-              <span className="text-xs font-bold text-slate-800">Note for Parents : </span>
-              <span className="text-xs text-slate-600">
-                For Outpass Inquiries & Emergency Residence Contact:{" "}
-              </span>
-              <span className="text-xs font-semibold text-[#0072bc]">myksupport@karunya.edu.in</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold text-slate-800">Note for Students : </span>
-              <span className="text-xs text-slate-600">
-                For SRA Room Allotment & Password Assistance:{" "}
-              </span>
-              <span className="text-xs font-semibold text-[#0072bc]">hosteldesk@karunya.edu</span>
-            </div>
+          <div className="p-3 bg-white border border-zinc-200 rounded-lg">
+            <span className="font-medium text-zinc-700 block mb-0.5">Note for Students</span>
+            <span>Room allotments & IT support: hosteldesk@karunya.edu</span>
           </div>
         </div>
       </main>
 
-      {/* University Footer */}
-      <footer className="w-full border-t border-slate-100 py-4 px-6 text-center text-xs text-slate-500 bg-slate-50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div>
-            © 2026 Karunya Institute of Technology and Sciences • Deemed to be University
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-slate-700">EduStay Residence System</span>
-            <span>•</span>
-            <span>Academic Software Engineering Project</span>
-          </div>
-        </div>
+      {/* Footer */}
+      <footer className="w-full border-t border-zinc-200/80 py-3 px-6 text-center text-xs text-zinc-400 bg-white">
+        © 2026 Karunya Institute of Technology & Sciences • EduStay Portal
       </footer>
     </div>
   );
 }
-

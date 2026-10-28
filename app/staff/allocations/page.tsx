@@ -2,14 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Building,
   BedDouble,
-  Users,
   CheckCircle2,
   AlertCircle,
-  Plus,
-  ArrowRight,
-  Shield,
 } from "lucide-react";
 
 export default function StaffAllocationsPage() {
@@ -21,7 +16,7 @@ export default function StaffAllocationsPage() {
   // Form State
   const [targetStudentId, setTargetStudentId] = useState("");
   const [targetBedId, setTargetBedId] = useState("");
-  const [remarks, setRemarks] = useState("Administrative Allotment by Hostel Admin");
+  const [remarks, setRemarks] = useState("Administrative Allotment");
 
   const loadData = () => {
     fetch("/api/staff/allocations")
@@ -69,8 +64,8 @@ export default function StaffAllocationsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-xs font-semibold text-slate-500">Loading residence allocation engine...</div>
+      <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="text-xs text-zinc-500">Loading allocations...</div>
       </div>
     );
   }
@@ -101,62 +96,68 @@ export default function StaffAllocationsPage() {
   });
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div className="border-b border-slate-200 pb-4">
-        <h1 className="text-xl font-bold text-slate-900">Hostel Room & Bed Allocation Engine</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Assign verified student bed allotments and maintain residence hierarchy (Hostel → Wing → Floor → Room → Bed)
+    <div className="space-y-6 max-w-4xl">
+      <div className="border-b border-zinc-200 pb-4">
+        <h1 className="text-lg font-semibold text-zinc-900 tracking-tight">Hostel Bed Allocations</h1>
+        <p className="text-xs text-zinc-500 mt-0.5">
+          Assign student room and bed allotments across residence halls
         </p>
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-xs font-semibold flex items-center gap-2 ${
-          message.startsWith("Error")
-            ? "bg-rose-50 border border-rose-200 text-rose-700"
-            : "bg-emerald-50 border border-emerald-200 text-emerald-700"
-        }`}>
-          {message.startsWith("Error") ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+        <div
+          className={`p-3 rounded text-xs flex items-center gap-2 border ${
+            message.startsWith("Error")
+              ? "bg-red-50 border-red-200 text-red-800"
+              : "bg-zinc-50 border-zinc-200 text-zinc-800"
+          }`}
+        >
+          {message.startsWith("Error") ? (
+            <AlertCircle className="w-4 h-4 text-red-600" />
+          ) : (
+            <CheckCircle2 className="w-4 h-4 text-zinc-700" />
+          )}
           <span>{message}</span>
         </div>
       )}
 
       {/* Manual Allocation Form */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4 text-xs">
-        <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2.5">
-          <BedDouble className="w-4 h-4 text-[#0072bc]" />
-          <span>Execute Official Bed Allotment</span>
+      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4 text-xs">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 flex items-center gap-2 border-b border-zinc-100 pb-2.5">
+          <BedDouble className="w-4 h-4 text-zinc-600" />
+          <span>Execute Bed Allotment</span>
         </h2>
 
-        <form onSubmit={handleAllocate} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onSubmit={handleAllocate} className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Select Student from Preference Queue</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Select Student Request</label>
               <select
                 required
                 value={targetStudentId}
                 onChange={(e) => setTargetStudentId(e.target.value)}
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
               >
-                <option value="">-- Choose Student Request --</option>
+                <option value="">-- Choose Student --</option>
                 {pendingPreferences.map((p: any) => (
                   <option key={p.id} value={p.student.id}>
-                    {p.student.user.fullName} ({p.student.user.identifier}) - Pref: {p.preferredRoomType}
+                    {p.student.user.fullName} ({p.student.user.identifier}) - {p.preferredRoomType}
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">
-                Select Available Bed ({availableBeds.length} Unoccupied)
+              <label className="text-zinc-500 block mb-1 text-[11px]">
+                Select Bed ({availableBeds.length} Available)
               </label>
               <select
                 required
                 value={targetBedId}
                 onChange={(e) => setTargetBedId(e.target.value)}
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
               >
-                <option value="">-- Choose Available Bed --</option>
+                <option value="">-- Choose Bed --</option>
                 {availableBeds.map((b: any) => (
                   <option key={b.bedId} value={b.bedId}>
                     {b.hostelName} - {b.wingName} | Room {b.roomNumber} (Bed {b.bedCode}) - {b.roomType}
@@ -166,12 +167,12 @@ export default function StaffAllocationsPage() {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-slate-700 font-semibold block mb-1">Official Allocation Remarks</label>
+              <label className="text-zinc-500 block mb-1 text-[11px]">Allocation Remarks</label>
               <input
                 type="text"
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
-                className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
               />
             </div>
           </div>
@@ -180,46 +181,45 @@ export default function StaffAllocationsPage() {
             <button
               type="submit"
               disabled={allocating || !targetStudentId || !targetBedId}
-              className="px-6 py-2.5 bg-[#0072bc] hover:bg-[#005ea2] disabled:bg-slate-400 text-white font-bold rounded-lg shadow-sm transition"
+              className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-medium rounded text-xs transition"
             >
-              {allocating ? "Executing Transaction..." : "Confirm & Persist Bed Allocation"}
+              {allocating ? "Processing..." : "Confirm Allocation"}
             </button>
           </div>
         </form>
       </section>
 
       {/* Recent Allocations Audit List */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4 text-xs">
-        <h2 className="text-sm font-bold text-slate-900 flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <span>Recent Confirmed Bed Allocations</span>
-          <span className="text-slate-400 font-medium">PostgreSQL Transaction Safe</span>
+      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-3 text-xs">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 border-b border-zinc-100 pb-2.5">
+          Recent Allocations
         </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+            <thead className="bg-zinc-50 text-zinc-600 font-medium border-b border-zinc-200">
               <tr>
-                <th className="py-2.5 px-3">Student Name</th>
-                <th className="py-2.5 px-3">Register No</th>
-                <th className="py-2.5 px-3">Hostel</th>
-                <th className="py-2.5 px-3">Room & Bed</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3">Allocation Date</th>
+                <th className="py-2 px-3">Student Name</th>
+                <th className="py-2 px-3">Register No</th>
+                <th className="py-2 px-3">Hostel</th>
+                <th className="py-2 px-3">Room & Bed</th>
+                <th className="py-2 px-3">Status</th>
+                <th className="py-2 px-3">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+            <tbody className="divide-y divide-zinc-100 text-zinc-700">
               {recentAllocations.map((a: any) => (
-                <tr key={a.id} className="hover:bg-slate-50 transition">
-                  <td className="py-2.5 px-3 font-bold text-slate-900">{a.student.user.fullName}</td>
-                  <td className="py-2.5 px-3 font-mono text-[#0072bc]">{a.student.user.identifier}</td>
+                <tr key={a.id} className="hover:bg-zinc-50 transition">
+                  <td className="py-2.5 px-3 font-medium text-zinc-900">{a.student.user.fullName}</td>
+                  <td className="py-2.5 px-3 font-mono text-zinc-600">{a.student.user.identifier}</td>
                   <td className="py-2.5 px-3">{a.hostel.name}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold">Room {a.room.roomNumber} ({a.bed.bedCode})</td>
+                  <td className="py-2.5 px-3 font-mono">Room {a.room.roomNumber} ({a.bed.bedCode})</td>
                   <td className="py-2.5 px-3">
-                    <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                    <span className="px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 text-[10px] border border-zinc-200">
                       {a.status}
                     </span>
                   </td>
-                  <td className="py-2.5 px-3 text-slate-500">{new Date(a.allocationDate).toLocaleDateString()}</td>
+                  <td className="py-2.5 px-3 text-zinc-500">{new Date(a.allocationDate).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -229,4 +229,3 @@ export default function StaffAllocationsPage() {
     </div>
   );
 }
-

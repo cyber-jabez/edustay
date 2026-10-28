@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --primary-navy: #0a2240;
-  --primary-blue: #0284c7;
-  --accent-cyan: #06b6d4;
-  --karunya-blue: #0072bc;
-  --bg-surface: #f8fafc;
+  --background: #fafafa;
+  --foreground: #18181b;
+  --muted: #71717a;
+  --border: #e4e4e7;
+  --accent: #27272a;
 }
 
 body {
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: #fafafa;
+  color: #18181b;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar for professional university density */
+/* Minimal neutral scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d4d4d8;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a1a1aa;
 }
 
-/* Subtle transitions without distracting animations */
+/* Subtle, neutral interactive cards */
 .portal-card {
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .portal-card:hover {
-  box-shadow: 0 4px 14px 0 rgba(0, 114, 188, 0.08);
+  border-color: #d4d4d8;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
 }
-

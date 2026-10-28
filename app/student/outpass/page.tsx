@@ -6,13 +6,9 @@ import {
   Clock,
   Send,
   CheckCircle2,
-  XCircle,
   AlertCircle,
-  ShieldAlert,
-  Calendar,
-  Phone,
   MapPin,
-  HelpCircle,
+  Phone,
 } from "lucide-react";
 
 export default function StudentOutpassPage() {
@@ -63,8 +59,7 @@ export default function StudentOutpassPage() {
       const resData = await res.json();
       if (!res.ok) throw new Error(resData.error || "Outpass submission failed");
 
-      setMessage(`Success: Outpass application ${resData.outpass.outpassNumber} submitted successfully. Dual approval workflow initiated.`);
-      // Reset form & reload
+      setMessage(`Success: Application ${resData.outpass.outpassNumber} submitted.`);
       setDestination("");
       setReason("");
       const refreshed = await fetch("/api/outpass").then((r) => r.json());
@@ -79,290 +74,248 @@ export default function StudentOutpassPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="text-xs font-semibold text-slate-500">Loading student outpasses & policies...</div>
+        <div className="text-xs text-zinc-500 font-medium">Loading outpass options...</div>
       </div>
     );
   }
 
-  const { outpasses = [], formTypes = [] } = data || {};
+  const { outpasses = [] } = data || {};
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div className="border-b border-slate-200 pb-4">
-        <h1 className="text-xl font-bold text-slate-900">Student Residence Outpass Portal</h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Dual Mentor & SRA authorization for campus exit permissions (Yellow, Green & White Forms)
+    <div className="space-y-5 max-w-5xl font-sans">
+      <div className="border-b border-zinc-200 pb-3">
+        <h1 className="text-lg font-bold text-zinc-900 tracking-tight">Outpass Applications</h1>
+        <p className="text-xs text-zinc-500">
+          Independent Mentor & SRA dual authorization for campus leave
         </p>
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-xs font-semibold flex items-center gap-2 ${
+        <div className={`p-3 rounded-lg text-xs font-medium flex items-center gap-2 ${
           message.startsWith("Error")
-            ? "bg-rose-50 border border-rose-200 text-rose-700"
-            : "bg-emerald-50 border border-emerald-200 text-emerald-700"
+            ? "bg-zinc-100 border border-zinc-300 text-zinc-800"
+            : "bg-zinc-100 border border-zinc-300 text-zinc-900"
         }`}>
           {message.startsWith("Error") ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
           <span>{message}</span>
         </div>
       )}
 
-      {/* Form Types Selection Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Yellow Form */}
+      {/* Form Choice Cards - Minimal and Flat */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div
           onClick={() => setFormTypeCode("YELLOW")}
-          className={`p-4 rounded-xl border cursor-pointer transition ${
+          className={`p-3.5 rounded-xl border cursor-pointer transition text-xs ${
             formTypeCode === "YELLOW"
-              ? "border-amber-400 bg-amber-50/70 shadow-sm ring-2 ring-amber-200"
-              : "border-slate-200 bg-white hover:bg-slate-50"
+              ? "border-zinc-900 bg-white ring-1 ring-zinc-900 shadow-xs"
+              : "border-zinc-200 bg-white hover:border-zinc-300"
           }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-black text-amber-900">YELLOW FORM</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-900">Max 1 Day</span>
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-semibold text-zinc-900">Yellow Form</span>
+            <span className="text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">Day Leave</span>
           </div>
-          <div className="text-xs font-bold text-slate-800">Local City & Weekend Day Outpass</div>
-          <p className="text-[11px] text-slate-500 mt-1">
-            Permission to visit Coimbatore city or nearby areas. Mandatory return by 08:30 PM roll call.
-          </p>
+          <div className="text-zinc-500 text-[11px] leading-relaxed">
+            Local city and weekend visits. Return by 08:30 PM roll call mandatory.
+          </div>
         </div>
 
-        {/* Green Form */}
         <div
           onClick={() => setFormTypeCode("GREEN")}
-          className={`p-4 rounded-xl border cursor-pointer transition ${
+          className={`p-3.5 rounded-xl border cursor-pointer transition text-xs ${
             formTypeCode === "GREEN"
-              ? "border-emerald-500 bg-emerald-50/70 shadow-sm ring-2 ring-emerald-200"
-              : "border-slate-200 bg-white hover:bg-slate-50"
+              ? "border-zinc-900 bg-white ring-1 ring-zinc-900 shadow-xs"
+              : "border-zinc-200 bg-white hover:border-zinc-300"
           }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-black text-emerald-900">GREEN FORM</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-200 text-emerald-900">Up to 5 Days</span>
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-semibold text-zinc-900">Green Form</span>
+            <span className="text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">Up to 5 Days</span>
           </div>
-          <div className="text-xs font-bold text-slate-800">Academic & Official Duty Outpass</div>
-          <p className="text-[11px] text-slate-500 mt-1">
-            Authorized leave for hackathons, sports, symposiums, or institutional internships.
-          </p>
+          <div className="text-zinc-500 text-[11px] leading-relaxed">
+            Academic competitions, sports, and institutional projects.
+          </div>
         </div>
 
-        {/* White Form */}
         <div
           onClick={() => setFormTypeCode("WHITE")}
-          className={`p-4 rounded-xl border cursor-pointer transition ${
+          className={`p-3.5 rounded-xl border cursor-pointer transition text-xs ${
             formTypeCode === "WHITE"
-              ? "border-blue-500 bg-blue-50/70 shadow-sm ring-2 ring-blue-200"
-              : "border-slate-200 bg-white hover:bg-slate-50"
+              ? "border-zinc-900 bg-white ring-1 ring-zinc-900 shadow-xs"
+              : "border-zinc-200 bg-white hover:border-zinc-300"
           }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-black text-blue-900">WHITE FORM</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-900">Up to 14 Days</span>
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-semibold text-zinc-900">White Form</span>
+            <span className="text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">Up to 14 Days</span>
           </div>
-          <div className="text-xs font-bold text-slate-800">Home & Extended Vacation Outpass</div>
-          <p className="text-[11px] text-slate-500 mt-1">
-            Overnight travel to registered permanent home during holidays or semester breaks.
-          </p>
+          <div className="text-zinc-500 text-[11px] leading-relaxed">
+            Home travel during vacation, study holidays, or emergencies.
+          </div>
         </div>
       </div>
 
       {/* Application Form */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <Send className="w-4 h-4 text-[#0072bc]" />
-            <span>Apply for {formTypeCode} Form Outpass</span>
-          </h2>
-          <span className="text-[10px] font-semibold text-slate-500">Dual Authorization Enforced</span>
+      <section className="bg-white border border-zinc-200 rounded-xl p-4 space-y-4">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
+          <span className="text-xs font-semibold text-zinc-800">
+            Apply: {formTypeCode} Form
+          </span>
+          <span className="text-[11px] text-zinc-400">Dual clearance required</span>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Destination Address / City</label>
+              <label className="text-zinc-700 font-medium block mb-1">Destination Address</label>
               <div className="relative">
                 <input
                   type="text"
                   required
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  placeholder="e.g. Gandhipuram / RS Puram, Coimbatore"
-                  className="w-full p-2.5 pl-8 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                  placeholder="e.g. Gandhipuram, Coimbatore"
+                  className="w-full p-2 pl-7 border border-zinc-200 rounded-lg focus:border-zinc-900 focus:outline-none"
                 />
-                <MapPin className="w-4 h-4 text-slate-400 absolute left-2.5 top-3" />
+                <MapPin className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-2.5" />
               </div>
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Student Contact Phone During Leave</label>
+              <label className="text-zinc-700 font-medium block mb-1">Contact Phone During Leave</label>
               <div className="relative">
                 <input
                   type="text"
                   required
                   value={contactPhone}
                   onChange={(e) => setContactPhone(e.target.value)}
-                  className="w-full p-2.5 pl-8 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                  className="w-full p-2 pl-7 border border-zinc-200 rounded-lg focus:border-zinc-900 focus:outline-none"
                 />
-                <Phone className="w-4 h-4 text-slate-400 absolute left-2.5 top-3" />
+                <Phone className="w-3.5 h-3.5 text-zinc-400 absolute left-2.5 top-2.5" />
               </div>
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Planned Departure Date & Time</label>
+              <label className="text-zinc-700 font-medium block mb-1">Departure Date & Time</label>
               <input
                 type="datetime-local"
                 required
                 value={departureTime}
                 onChange={(e) => setDepartureTime(e.target.value)}
-                className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-2 border border-zinc-200 rounded-lg focus:border-zinc-900 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-slate-700 font-semibold block mb-1">Expected Return Date & Time</label>
+              <label className="text-zinc-700 font-medium block mb-1">Expected Return Date & Time</label>
               <input
                 type="datetime-local"
                 required
                 value={expectedReturnTime}
                 onChange={(e) => setExpectedReturnTime(e.target.value)}
-                className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                className="w-full p-2 border border-zinc-200 rounded-lg focus:border-zinc-900 focus:outline-none"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-slate-700 font-semibold block mb-1">Detailed Reason for Leave</label>
+              <label className="text-zinc-700 font-medium block mb-1">Reason for Leave</label>
               <textarea
                 rows={2}
                 required
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                placeholder="Specify exact academic, medical, or personal purpose"
-                className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0072bc] focus:outline-none"
+                placeholder="Specify purpose of travel"
+                className="w-full p-2 border border-zinc-200 rounded-lg focus:border-zinc-900 focus:outline-none"
               />
             </div>
 
-            <div className="sm:col-span-2 flex items-center gap-2 pt-1">
+            <div className="sm:col-span-2 flex items-center gap-2">
               <input
                 type="checkbox"
                 id="parentConsent"
                 checked={parentConsentGiven}
                 onChange={(e) => setParentConsentGiven(e.target.checked)}
-                className="w-4 h-4 rounded text-[#0072bc]"
+                className="w-3.5 h-3.5 rounded text-zinc-900"
               />
-              <label htmlFor="parentConsent" className="text-slate-700 font-medium">
-                I certify that my parents/guardian have been informed and have given consent for this travel.
+              <label htmlFor="parentConsent" className="text-zinc-600 font-normal">
+                Parents or guardian have been informed and consented to this journey.
               </label>
             </div>
           </div>
 
-          <div className="flex justify-end pt-2">
+          <div className="flex justify-end pt-1">
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 rounded-lg bg-[#0072bc] hover:bg-[#005ea2] disabled:bg-slate-400 text-white font-bold text-xs shadow-sm transition"
+              className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-medium text-xs rounded-lg transition"
             >
-              {submitting ? "Submitting Application..." : "Submit Outpass for Dual Review"}
+              {submitting ? "Submitting..." : "Submit Application"}
             </button>
           </div>
         </form>
       </section>
 
-      {/* Outpass Applications History & Live Dual Status Timeline */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-purple-600" />
-          <span>Application Records & Approval Timelines</span>
-        </h2>
+      {/* Outpass Applications List */}
+      <section className="bg-white border border-zinc-200 rounded-xl p-4 space-y-3">
+        <div className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          Application Records & History
+        </div>
 
         {outpasses.length === 0 ? (
-          <div className="text-xs text-slate-500 py-3">No outpasses submitted yet.</div>
+          <div className="text-xs text-zinc-400 py-3 text-center">No applications found.</div>
         ) : (
-          <div className="space-y-4">
-            {outpasses.map((op: any) => {
-              const isApproved = op.status === "APPROVED" || op.status === "COMPLETED";
-              const isRejected = op.status === "REJECTED";
-              const isPending = !isApproved && !isRejected;
-
-              return (
-                <div key={op.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/40 space-y-3">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-slate-900 text-sm">{op.outpassNumber}</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-800">
-                          {op.formType.name}
-                        </span>
-                      </div>
-                      <div className="text-xs text-slate-600 mt-1">
-                        <span className="font-semibold">Destination:</span> {op.destination}
-                      </div>
-                    </div>
-
-                    <span className={`px-2.5 py-1 rounded text-xs font-black ${
-                      isApproved ? "bg-emerald-100 text-emerald-800" : isRejected ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"
-                    }`}>
-                      {op.status.replace("_", " ")}
+          <div className="space-y-3">
+            {outpasses.map((op: any) => (
+              <div key={op.id} className="p-3.5 rounded-lg border border-zinc-200 bg-zinc-50/40 space-y-2.5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-zinc-100 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-zinc-900 text-xs">{op.outpassNumber}</span>
+                    <span className="text-[10px] text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">
+                      {op.formType.name}
                     </span>
                   </div>
 
-                  <div className="text-xs text-slate-600">
-                    <span className="font-semibold text-slate-700">Reason:</span> {op.reason}
-                  </div>
+                  <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 self-start sm:self-auto">
+                    {op.status.replace("_", " ")}
+                  </span>
+                </div>
 
-                  {/* Dual Approval Visualization Box */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
-                    {/* Mentor Step */}
-                    <div className={`p-3 rounded-lg border ${
-                      op.mentorDecision === "APPROVED"
-                        ? "bg-emerald-50/70 border-emerald-200 text-emerald-900"
-                        : op.mentorDecision === "REJECTED"
-                        ? "bg-rose-50/70 border-rose-200 text-rose-900"
-                        : "bg-slate-100/70 border-slate-200 text-slate-700"
-                    }`}>
-                      <div className="flex items-center justify-between font-bold">
-                        <span>1. Faculty Mentor Review</span>
-                        <span>{op.mentorDecision}</span>
-                      </div>
-                      <div className="text-[11px] text-slate-600 mt-1">
-                        Mentor: {op.mentor?.user?.fullName || "Assigned Mentor"}
-                      </div>
-                      {op.mentorComments && (
-                        <div className="text-[10px] italic text-slate-500 mt-1">"{op.mentorComments}"</div>
-                      )}
+                <div className="text-xs text-zinc-700">
+                  <span className="text-zinc-400">Destination:</span> {op.destination} • <span className="text-zinc-400">Reason:</span> {op.reason}
+                </div>
+
+                {/* Dual Review Progress */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="p-2.5 rounded border border-zinc-200 bg-white">
+                    <div className="flex items-center justify-between font-medium text-zinc-900">
+                      <span>1. Mentor Review</span>
+                      <span className="text-[10px] text-zinc-500">{op.mentorDecision}</span>
                     </div>
-
-                    {/* SRA Step */}
-                    <div className={`p-3 rounded-lg border ${
-                      op.sraDecision === "APPROVED"
-                        ? "bg-emerald-50/70 border-emerald-200 text-emerald-900"
-                        : op.sraDecision === "REJECTED"
-                        ? "bg-rose-50/70 border-rose-200 text-rose-900"
-                        : "bg-slate-100/70 border-slate-200 text-slate-700"
-                    }`}>
-                      <div className="flex items-center justify-between font-bold">
-                        <span>2. SRA Residence Review</span>
-                        <span>{op.sraDecision}</span>
-                      </div>
-                      <div className="text-[11px] text-slate-600 mt-1">
-                        SRA: {op.sra?.user?.fullName || "Assigned SRA"}
-                      </div>
-                      {op.sraComments && (
-                        <div className="text-[10px] italic text-slate-500 mt-1">"{op.sraComments}"</div>
-                      )}
+                    <div className="text-[10px] text-zinc-400 mt-0.5">
+                      {op.mentor?.user?.fullName || "Assigned Mentor"}
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
-                    <span>Departure: {new Date(op.departureTime).toLocaleString()}</span>
-                    <span>Expected Return: {new Date(op.expectedReturnTime).toLocaleString()}</span>
+                  <div className="p-2.5 rounded border border-zinc-200 bg-white">
+                    <div className="flex items-center justify-between font-medium text-zinc-900">
+                      <span>2. SRA Review</span>
+                      <span className="text-[10px] text-zinc-500">{op.sraDecision}</span>
+                    </div>
+                    <div className="text-[10px] text-zinc-400 mt-0.5">
+                      {op.sra?.user?.fullName || "Assigned SRA"}
+                    </div>
                   </div>
                 </div>
-              );
-            })}
+
+                <div className="flex flex-wrap items-center justify-between text-[10px] text-zinc-400 pt-1">
+                  <span>Departure: {new Date(op.departureTime).toLocaleString()}</span>
+                  <span>Return: {new Date(op.expectedReturnTime).toLocaleString()}</span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </section>
     </div>
   );
 }
-
