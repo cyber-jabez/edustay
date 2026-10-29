@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: edustay
+    env: node
+    plan: free
+    buildCommand: npm install && npm run render:build
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: edustay-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: edustay-db
+    plan: free
+    databaseName: edustay
+    user: postgres
+
