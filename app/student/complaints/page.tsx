@@ -6,6 +6,7 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  Send,
 } from "lucide-react";
 
 export default function StudentComplaintsPage() {
@@ -14,7 +15,6 @@ export default function StudentComplaintsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  // Form State
   const [category, setCategory] = useState("WIFI");
   const [priority, setPriority] = useState("MEDIUM");
   const [title, setTitle] = useState("");
@@ -57,7 +57,7 @@ export default function StudentComplaintsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Submission failed");
 
-      setMessage(`Complaint ticket #${data.complaint.ticketNumber} registered successfully.`);
+      setMessage(`Ticket #${data.complaint.ticketNumber} registered successfully.`);
       setTitle("");
       setDescription("");
 
@@ -70,97 +70,131 @@ export default function StudentComplaintsPage() {
     }
   };
 
+  const statusStyle = (status: string) => {
+    switch (status) {
+      case "RESOLVED":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "IN_PROGRESS":
+        return "bg-blue-50 text-karunya-blue border-blue-200";
+      case "CLOSED":
+        return "bg-slate-100 text-slate-600 border-slate-200";
+      default:
+        return "bg-amber-50 text-amber-700 border-amber-200";
+    }
+  };
+
+  const priorityStyle = (p: string) => {
+    switch (p) {
+      case "URGENT":
+        return "bg-red-50 text-red-600 border-red-200";
+      case "HIGH":
+        return "bg-orange-50 text-orange-600 border-orange-200";
+      case "LOW":
+        return "bg-slate-50 text-slate-500 border-slate-200";
+      default:
+        return "bg-blue-50 text-karunya-blue border-blue-200";
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="text-xs text-zinc-500">Loading complaints...</div>
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-3">
+        <div className="w-6 h-6 border-2 border-karunya-blue border-t-transparent rounded-full animate-spin" />
+        <div className="text-sm text-slate-500 font-poppins">Loading complaints...</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div className="border-b border-zinc-200 pb-4">
-        <h1 className="text-lg font-semibold text-zinc-900 tracking-tight">Hostel Complaints & Maintenance</h1>
-        <p className="text-xs text-zinc-500 mt-0.5">
-          Report room, electrical, plumbing, or facility maintenance issues
-        </p>
+    <div className="space-y-5 max-w-4xl font-poppins">
+      <div className="border-b border-slate-200 pb-4">
+        <h1 className="text-xl font-bold text-slate-800 font-lora">Hostel Complaints & Maintenance</h1>
       </div>
 
       {message && (
         <div
-          className={`p-3 rounded text-xs flex items-center gap-2 border ${
+          className={`p-4 rounded-xl text-sm font-medium flex items-center gap-3 border ${
             message.startsWith("Error")
-              ? "bg-red-50 border-red-200 text-red-800"
-              : "bg-zinc-50 border-zinc-200 text-zinc-800"
+              ? "bg-red-50 border-red-200 text-red-700"
+              : "bg-emerald-50 border-emerald-200 text-emerald-700"
           }`}
         >
           {message.startsWith("Error") ? (
-            <AlertCircle className="w-4 h-4 text-red-600" />
+            <AlertCircle className="w-4 h-4 shrink-0" />
           ) : (
-            <CheckCircle2 className="w-4 h-4 text-zinc-700" />
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
           )}
           <span>{message}</span>
         </div>
       )}
 
-      {/* Ticket Submission Form */}
-      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 flex items-center gap-2 border-b border-zinc-100 pb-2.5">
-          <Wrench className="w-4 h-4 text-zinc-600" />
-          <span>New Maintenance Request</span>
-        </h2>
+      {/* Submission Form */}
+      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-card">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-5">
+          <Wrench className="w-4 h-4 text-karunya-blue" />
+          <h2 className="text-sm font-semibold text-slate-800 font-lora">New Maintenance Request</h2>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-zinc-700 font-medium block mb-1 text-[11px]">Category</label>
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-1.5">
+                Category
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
+                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm focus:border-karunya-blue focus:outline-none focus:ring-1 focus:ring-karunya-blue transition bg-white"
               >
                 {categories.map((c) => (
-                  <option key={c.code} value={c.code}>{c.label}</option>
+                  <option key={c.code} value={c.code}>
+                    {c.label}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="text-zinc-700 font-medium block mb-1 text-[11px]">Priority</label>
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-1.5">
+                Priority
+              </label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition bg-white"
+                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm focus:border-karunya-blue focus:outline-none focus:ring-1 focus:ring-karunya-blue transition bg-white"
               >
-                <option value="LOW">Low (Non-urgent)</option>
-                <option value="MEDIUM">Medium (Standard)</option>
-                <option value="HIGH">High (Immediate attention)</option>
-                <option value="URGENT">Urgent (Safety / leakage)</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+                <option value="URGENT">Urgent</option>
               </select>
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-zinc-700 font-medium block mb-1 text-[11px]">Subject / Title</label>
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-1.5">
+                Subject
+              </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Brief summary of the defect or issue"
-                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
+                placeholder="Summary of the issue"
+                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm focus:border-karunya-blue focus:outline-none focus:ring-1 focus:ring-karunya-blue transition"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-zinc-700 font-medium block mb-1 text-[11px]">Description</label>
+              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide block mb-1.5">
+                Description
+              </label>
               <textarea
                 rows={3}
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Provide details about the issue and exact location..."
-                className="w-full p-2 border border-zinc-300 rounded text-xs focus:border-zinc-900 focus:outline-none transition"
+                placeholder="Details of the issue..."
+                className="w-full p-3 border border-slate-200 rounded-xl text-sm focus:border-karunya-blue focus:outline-none focus:ring-1 focus:ring-karunya-blue transition resize-none"
               />
             </div>
           </div>
@@ -169,56 +203,56 @@ export default function StudentComplaintsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 rounded bg-zinc-900 hover:bg-zinc-800 disabled:bg-zinc-400 text-white font-medium text-xs transition"
+              className="px-6 py-2.5 bg-karunya-blue hover:bg-sky-600 disabled:bg-slate-300 text-white font-semibold text-sm rounded-xl transition flex items-center gap-2 shadow-sm"
             >
-              {submitting ? "Submitting..." : "Submit Ticket"}
+              <Send className="w-4 h-4" />
+              <span>{submitting ? "Submitting..." : "Submit Ticket"}</span>
             </button>
           </div>
         </form>
       </section>
 
-      {/* Existing Tickets Lifecycle List */}
-      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-zinc-600" />
-          <span>My Tickets</span>
-        </h2>
+      {/* Tickets List */}
+      <section className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-card">
+        <div className="flex items-center gap-2 px-5 py-3.5 border-b border-slate-100">
+          <Clock className="w-4 h-4 text-slate-400" />
+          <h2 className="text-sm font-semibold text-slate-800 font-lora">My Tickets</h2>
+        </div>
 
         {complaints.length === 0 ? (
-          <div className="text-xs text-zinc-500 py-2">No maintenance tickets logged.</div>
+          <div className="text-sm text-slate-400 py-8 text-center">No maintenance tickets logged.</div>
         ) : (
-          <div className="space-y-3">
+          <div className="divide-y divide-slate-100">
             {complaints.map((c) => (
-              <div key={c.id} className="p-3.5 rounded border border-zinc-200 bg-zinc-50 space-y-2">
+              <div key={c.id} className="p-5 space-y-2.5 hover:bg-slate-50/50 transition">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-medium text-zinc-900 text-xs">#{c.ticketNumber}</span>
-                    <span className="text-[10px] text-zinc-600 bg-zinc-200 px-1.5 py-0.5 rounded">
-                      {c.category.replace(/_/g, " ")}
-                    </span>
-                    <span className="text-[10px] text-zinc-600 bg-zinc-200 px-1.5 py-0.5 rounded">
+                    <span className="font-mono font-bold text-slate-900 text-sm">#{c.ticketNumber}</span>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${priorityStyle(c.priority)}`}>
                       {c.priority}
                     </span>
+                    <span className="text-[10px] text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                      {c.category.replace(/_/g, " ")}
+                    </span>
                   </div>
-
-                  <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-200 text-zinc-800">
+                  <span className={`text-[11px] font-semibold px-3 py-1 rounded-full border ${statusStyle(c.status)}`}>
                     {c.status.replace(/_/g, " ")}
                   </span>
                 </div>
 
-                <div className="text-xs font-medium text-zinc-900">{c.title}</div>
-                <p className="text-xs text-zinc-600">{c.description}</p>
+                <div className="text-sm font-semibold text-slate-800">{c.title}</div>
+                <p className="text-sm text-slate-600">{c.description}</p>
 
                 {c.resolutionNotes && (
-                  <div className="p-2.5 rounded bg-white border border-zinc-200 text-[11px] text-zinc-700">
-                    <span className="font-medium text-zinc-900">Staff Resolution: </span>
+                  <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-xs text-emerald-800">
+                    <span className="font-semibold">Resolution: </span>
                     {c.resolutionNotes} ({new Date(c.resolvedAt).toLocaleDateString()})
                   </div>
                 )}
 
-                <div className="text-[11px] text-zinc-400 flex items-center justify-between pt-1 border-t border-zinc-200">
-                  <span>Hostel: {c.hostel.name} {c.room?.roomNumber ? `• Room ${c.room.roomNumber}` : ""}</span>
-                  <span>{new Date(c.createdAt).toLocaleDateString()}</span>
+                <div className="text-xs text-slate-400 flex items-center justify-between pt-2 border-t border-slate-100">
+                  <span>{c.hostel.name} {c.room?.roomNumber ? `• Room ${c.room.roomNumber}` : ""}</span>
+                  <span>{new Date(c.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
                 </div>
               </div>
             ))}

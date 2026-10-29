@@ -22,102 +22,89 @@ export default function ResidentialHistoryPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="text-xs text-zinc-500">Retrieving residence history...</div>
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-3">
+        <div className="w-6 h-6 border-2 border-karunya-blue border-t-transparent rounded-full animate-spin" />
+        <div className="text-sm text-slate-500 font-poppins">Retrieving residence history...</div>
       </div>
     );
   }
 
   if (!data) {
-    return <div className="p-6 text-sm text-zinc-500">Residential history unavailable.</div>;
+    return <div className="p-6 text-sm text-slate-500 font-poppins">Residential history unavailable.</div>;
   }
 
   const { current, history } = data;
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div className="border-b border-zinc-200 pb-4">
-        <h1 className="text-lg font-semibold text-zinc-900 tracking-tight">Residential History</h1>
-        <p className="text-xs text-zinc-500 mt-0.5">
-          Audit record of past and active hostel allocations
-        </p>
+    <div className="space-y-5 max-w-4xl font-poppins">
+      <div className="border-b border-slate-200 pb-4">
+        <h1 className="text-xl font-bold text-slate-800 font-lora">Residential History</h1>
       </div>
 
       {/* Active Semester Allocation Card */}
-      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-zinc-900"></span>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900">Active Allocation</h2>
+      {current && (
+        <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-card space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <h2 className="text-sm font-semibold text-slate-800 font-lora">Active Allocation</h2>
+            </div>
+            <span className="text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+              {current.academicYear} • Semester {current.semester}
+            </span>
           </div>
-          <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200">
-            {current.academicYear} • Semester {current.semester}
-          </span>
-        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs pt-1">
-          <div>
-            <span className="text-zinc-500 block text-[11px]">Hostel</span>
-            <span className="font-medium text-zinc-900">{current.hostelName}</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {[
+              { label: "Hostel", value: current.hostelName },
+              { label: "Wing & Room", value: `${current.wingName} - Room ${current.roomNumber}` },
+              { label: "Bed Identifier", value: `Bed ${current.bedCode}` },
+              { label: "Room Type", value: `${current.roomType} ${current.isAc ? "(AC)" : "(Non-AC)"}` },
+            ].map((f) => (
+              <div key={f.label} className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+                <span className="text-xs text-slate-400 font-medium block mb-1">{f.label}</span>
+                <span className="text-sm font-semibold text-slate-800">{f.value}</span>
+              </div>
+            ))}
           </div>
-          <div>
-            <span className="text-zinc-500 block text-[11px]">Wing & Room</span>
-            <span className="font-medium text-zinc-900">{current.wingName} - Room {current.roomNumber}</span>
-          </div>
-          <div>
-            <span className="text-zinc-500 block text-[11px]">Bed Allotment</span>
-            <span className="font-semibold text-zinc-900">Bed {current.bedCode}</span>
-          </div>
-          <div>
-            <span className="text-zinc-500 block text-[11px]">Configuration</span>
-            <span className="font-medium text-zinc-900">{current.roomType}</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Chronological Historical Records Table */}
-      <section className="bg-white border border-zinc-200 rounded-lg p-5 space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-900 flex items-center gap-2">
-          <History className="w-4 h-4 text-zinc-600" />
-          <span>Residence Timeline</span>
-        </h2>
+      {/* Historical Residences */}
+      <section className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-card">
+        <div className="flex items-center gap-2 px-5 py-3.5 border-b border-slate-100">
+          <History className="w-4 h-4 text-slate-400" />
+          <h2 className="text-sm font-semibold text-slate-800 font-lora">Past Residence Allocations</h2>
+        </div>
 
         {history.length === 0 ? (
-          <div className="text-xs text-zinc-500 py-2">No previous hostel records archived.</div>
+          <div className="text-sm text-slate-400 py-8 text-center">No past residence records.</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-zinc-200 text-zinc-500 bg-zinc-50 font-medium">
-                  <th className="py-2.5 px-3">Period</th>
-                  <th className="py-2.5 px-3">Hostel</th>
-                  <th className="py-2.5 px-3">Room & Bed</th>
-                  <th className="py-2.5 px-3">Type</th>
-                  <th className="py-2.5 px-3">Check-In</th>
-                  <th className="py-2.5 px-3">Check-Out</th>
-                  <th className="py-2.5 px-3">Roommates</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-100 text-zinc-700">
-                {history.map((h: any) => (
-                  <tr key={h.id} className="hover:bg-zinc-50/50 transition">
-                    <td className="py-2.5 px-3 font-medium text-zinc-900">
-                      Sem {h.semester} ({h.academicYear})
-                    </td>
-                    <td className="py-2.5 px-3">{h.hostelName} ({h.wingName})</td>
-                    <td className="py-2.5 px-3 font-mono text-zinc-900">
-                      {h.roomNumber} ({h.bedCode})
-                    </td>
-                    <td className="py-2.5 px-3">{h.roomType}</td>
-                    <td className="py-2.5 px-3">{new Date(h.checkInDate).toLocaleDateString()}</td>
-                    <td className="py-2.5 px-3 text-zinc-500">
-                      {h.checkOutDate ? new Date(h.checkOutDate).toLocaleDateString() : "—"}
-                    </td>
-                    <td className="py-2.5 px-3 text-zinc-500">{h.roommatesSummary || "Single"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="divide-y divide-slate-100">
+            {history.map((h: any) => (
+              <div
+                key={h.id}
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/50 transition"
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold text-slate-800">
+                      {h.hostelName} ({h.wingName})
+                    </span>
+                    <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                      Room {h.roomNumber} • Bed {h.bedCode}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {h.academicYear} • Semester {h.semester} • {h.roomType} {h.isAc ? "(AC)" : "(Non-AC)"}
+                  </div>
+                </div>
+                <div className="text-xs text-slate-400 sm:text-right shrink-0">
+                  <div>Check-In: {new Date(h.checkInDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</div>
+                  <div>Check-Out: {h.checkOutDate ? new Date(h.checkOutDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }) : "Active"}</div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </section>

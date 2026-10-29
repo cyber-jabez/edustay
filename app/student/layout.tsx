@@ -8,7 +8,7 @@ export default function StudentLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-zinc-50 font-sans text-zinc-900">
+    <div className="flex min-h-screen bg-karunya-pageBg font-poppins text-slate-800">
       <StudentSidebar />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -17,7 +17,7 @@ export default function StudentLayout({
           {children}
         </main>
 
-        <footer className="w-full border-t border-zinc-200 py-3 px-6 text-center text-xs text-zinc-400 bg-white">
+        <footer className="w-full border-t border-slate-200 py-3 px-6 text-center text-[11px] text-slate-400 bg-white">
           © 2026 EduStay • Karunya Institute of Technology and Sciences
         </footer>
       </div>

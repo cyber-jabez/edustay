@@ -15,7 +15,6 @@ import {
   Bell,
   Sparkles,
   LogOut,
-  ChevronRight,
 } from "lucide-react";
 
 export function StudentSidebar() {
@@ -47,30 +46,38 @@ export function StudentSidebar() {
   };
 
   return (
-    <aside className="w-60 bg-white border-r border-zinc-200 flex flex-col justify-between shrink-0 h-screen sticky top-0 z-30 select-none font-sans">
+    <aside className="w-64 bg-karunya-navy flex flex-col justify-between shrink-0 h-screen sticky top-0 z-30 select-none font-poppins">
+      {/* Brand header */}
       <div>
-        {/* Brand header */}
-        <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-zinc-900 text-white flex items-center justify-center font-bold text-xs">
-              ES
+        <div className="px-5 py-5 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-sm shrink-0">
+              <img
+                src="/karunya-logo.png"
+                alt="Karunya Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div>
-              <div className="font-bold text-sm text-zinc-900 leading-tight">
+              <div className="font-bold text-base text-white leading-tight font-lora">
                 EduStay
               </div>
-              <div className="text-[10px] text-zinc-400 font-medium">
-                Student Residence
+              <div className="text-[11px] text-blue-300 font-medium mt-0.5">
+                Student Residence Portal
               </div>
             </div>
           </div>
-          <span className="text-[10px] font-medium text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">
-            Student
+        </div>
+
+        {/* Navigation section label */}
+        <div className="px-5 pt-5 pb-1.5">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-blue-400/70">
+            Navigation
           </span>
         </div>
 
         {/* Navigation list */}
-        <nav className="p-2.5 space-y-0.5 overflow-y-auto max-h-[calc(100vh-125px)] text-xs">
+        <nav className="px-3 space-y-0.5 overflow-y-auto max-h-[calc(100vh-160px)] pb-4 text-sm">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -79,17 +86,21 @@ export function StudentSidebar() {
               <a
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg transition-all ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group relative ${
                   isActive
-                    ? "bg-zinc-100 text-zinc-900 font-semibold"
-                    : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50"
+                    ? "bg-karunya-blue/20 text-white font-semibold border-l-[3px] border-karunya-blue pl-[9px]"
+                    : "text-blue-200/80 hover:text-white hover:bg-white/10 border-l-[3px] border-transparent"
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon className={`w-4 h-4 ${isActive ? "text-zinc-900" : "text-zinc-400"}`} />
-                  <span>{item.label}</span>
-                </div>
-                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-zinc-900"></span>}
+                <Icon
+                  className={`w-4 h-4 shrink-0 transition-colors ${
+                    isActive ? "text-karunya-sky" : "text-blue-400 group-hover:text-blue-200"
+                  }`}
+                />
+                <span className="text-[13px]">{item.label}</span>
+                {isActive && (
+                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-karunya-sky" />
+                )}
               </a>
             );
           })}
@@ -97,13 +108,13 @@ export function StudentSidebar() {
       </div>
 
       {/* Logout */}
-      <div className="p-2.5 border-t border-zinc-100 bg-zinc-50/50">
+      <div className="p-3 border-t border-white/10">
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-blue-200/70 hover:text-white hover:bg-white/10 transition-all duration-150"
         >
-          <LogOut className="w-3.5 h-3.5 text-zinc-400" />
+          <LogOut className="w-4 h-4 text-blue-400" />
           <span>Sign Out</span>
         </button>
       </div>

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Bell,
-} from "lucide-react";
+import { Bell } from "lucide-react";
 
 export default function StudentNoticesPage() {
   const [notices, setNotices] = useState<any[]>([]);
@@ -21,37 +19,44 @@ export default function StudentNoticesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[40vh]">
-        <div className="text-xs text-zinc-500">Loading notices...</div>
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-3">
+        <div className="w-6 h-6 border-2 border-karunya-blue border-t-transparent rounded-full animate-spin" />
+        <div className="text-sm text-slate-500 font-poppins">Loading notices...</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div className="border-b border-zinc-200 pb-4">
-        <h1 className="text-lg font-semibold text-zinc-900 tracking-tight">Announcements</h1>
-        <p className="text-xs text-zinc-500 mt-0.5">
-          Official institutional circulars and residence notices
-        </p>
+    <div className="space-y-5 max-w-4xl font-poppins">
+      <div className="border-b border-slate-200 pb-4 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0">
+          <Bell className="w-4 h-4 text-amber-500" />
+        </div>
+        <h1 className="text-xl font-bold text-slate-800 font-lora">Announcements</h1>
       </div>
 
       <div className="space-y-3">
         {notices.length === 0 ? (
-          <div className="text-xs text-zinc-500 py-6 text-center bg-white border border-zinc-200 rounded-lg">
+          <div className="text-sm text-slate-400 py-10 text-center bg-white border border-slate-200 rounded-xl shadow-card">
             No active announcements.
           </div>
         ) : (
           notices.map((n) => (
-            <div key={n.id} className="bg-white border border-zinc-200 rounded-lg p-5 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-zinc-900">{n.title}</span>
-                  <span className="text-[10px] text-zinc-600 bg-zinc-100 px-1.5 py-0.5 rounded border border-zinc-200">
-                    {n.category}
-                  </span>
+            <div
+              key={n.id}
+              className="bg-white border border-slate-200 rounded-xl p-5 shadow-card hover:border-blue-200 transition-all"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-slate-800">{n.title}</span>
+                    <span className="text-[11px] font-medium text-karunya-blue bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                      {n.category}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-600 leading-relaxed mt-2">{n.content}</p>
                 </div>
-                <span className="text-[11px] text-zinc-400">
+                <span className="text-xs text-slate-400 shrink-0 mt-0.5">
                   {new Date(n.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",
                     month: "short",
@@ -59,12 +64,13 @@ export default function StudentNoticesPage() {
                   })}
                 </span>
               </div>
-
-              <p className="text-xs text-zinc-600 leading-relaxed">{n.content}</p>
-
-              <div className="text-[11px] text-zinc-400 pt-2 border-t border-zinc-100 flex items-center justify-between">
-                <span>Issued by: {n.author.fullName}</span>
-                <span>{n.targetAudience.replace(/_/g, " ")}</span>
+              <div className="text-xs text-slate-400 pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+                <span>
+                  Issued by: <span className="font-medium text-slate-600">{n.author.fullName}</span>
+                </span>
+                <span className="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full">
+                  {n.targetAudience.replace(/_/g, " ")}
+                </span>
               </div>
             </div>
           ))
