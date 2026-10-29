@@ -105,9 +105,18 @@ export async function POST(req: NextRequest) {
       },
       redirectUrl,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login API error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+
+    let message = "Internal server error";
+    if (error?.message?.includes("Can't reach database server")) {
+      message = "Database unreachable. Please set DATABASE_URL in your Render Environment Variables.";
+    } else if (error?.code === "P2021" || error?.message?.includes("does not exist")) {
+      message = "Database tables not found. Please run 'npm run render:build' to initialize tables.";
+    } else if (error?.message) {
+      message = error.message.slice(0, 120);
+    }
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
